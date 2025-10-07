@@ -1,0 +1,50 @@
+﻿{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Responsive Admin &amp; Dashboard Template based on Bootstrap 5">
+    <meta name="author" content="Jassa">
+    <meta name="keywords" content="Jassa, bootstrap, bootstrap 5, admin, dashboard, template, responsive, css, sass, html, theme, front-end, ui kit, web">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="shortcut icon" href="{% static 'img/dashboard/icons/icon-48x48.png' %}">
+	
+	<!-- font-awesome cdn -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>ERP PROJECT</title>
+
+
+    <link href="{% static 'css/light.css' %}" rel="stylesheet">
+    <script src="{% static 'js/settings.js' %}"></script>
+</head>
+
+<body data-theme="default" data-layout="fluid" data-sidebar-position="left" data-sidebar-layout="default">
+	<div class="wrapper">
+
+		{% block  'left_sidebar' %}
+		{% include 'base_templates/left_sidebar.html' %}
+		{% endblock %}
+
+		<div class="main">
+
+			{% block 'navbar' %}
+			{% include 'base_templates/navbar.html' %}
+			{% endblock %}
+
+			{% block content %}
+			{% endblock %}
+
+
+			{% block 'footer' %}
+			{% include 'base_templates/footer.html' %}
+			{% endblock %}
+		</div>
+	</div>
+    <script src="{% static 'js/app.js' %}"></script>
+</body>
+
+</html>
