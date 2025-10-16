@@ -4,8 +4,8 @@
 			<div class="sidebar-content js-simplebar">
 				<a class="sidebar-brand" href="index.html">
 					<span class="sidebar-brand-text align-middle">
-						Jassa
-						<sup><small class="badge bg-primary text-uppercase">Pro</small></sup>
+						ERP
+						<small class="badge bg-primary text-uppercase">Project</small>
 					</span>
 					<svg class="sidebar-brand-icon align-middle" width="32px" height="32px" viewbox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter" color="#FFFFFF" style="margin-left: -3px">
 						<path d="M12 4L20 8.00004L12 12L4 8.00004L12 4Z"></path>
@@ -21,7 +21,7 @@
 						</div>
 						<div class="flex-grow-1 ps-2">
 							<a class="sidebar-user-title dropdown-toggle" href="#" data-bs-toggle="dropdown">
-								Jassa
+								{{ user.usuario.names }}
 							</a>
 							<div class="dropdown-menu dropdown-menu-start">
 								<a class="dropdown-item" href="pages-profile.html"><i class="align-middle me-1" data-feather="user"></i> Profile</a>
@@ -94,7 +94,17 @@
 					</li>
 
 					<li class="sidebar-header">
-						Components
+						Empresas
+					</li>
+					<li class="sidebar-item">
+						<a class="sidebar-link" href="{% url 'add_company' %}">
+							<i class="align-middle" data-feather="list"></i> <span class="align-middle">Agregar Empresa</span>
+						</a>
+					</li>
+					<li class="sidebar-item">
+						<a class="sidebar-link" href="{% url 'view_company' %}">
+							<i class="align-middle" data-feather="list"></i> <span class="align-middle">Ver Empresa</span>
+						</a>
 					</li>
 					<li class="sidebar-item">
 						<a data-bs-target="#ui" data-bs-toggle="collapse" class="sidebar-link collapsed">

@@ -6,6 +6,18 @@
 				<div class="container-fluid p-0">
 
 					<h1 class="h3 mb-3">Configuracion</h1>
+					{% if messages %}
+						<div class="container mt-3">
+							{% for message in messages %}
+										<div class="alert alert-{{ message.tags }} alert-dismissible" role="alert">
+											<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+											<div class="alert-message">
+												 {{ message }}
+											</div>
+										</div>
+							{% endfor %}
+						</div>
+					{% endif %}
 
 					<div class="row">
 						<div class="col-md-3 col-xl-2">
@@ -17,7 +29,7 @@
 
 								<div class="list-group list-group-flush" role="tablist">
 									<a class="list-group-item list-group-item-action active" data-bs-toggle="list" href="#account" role="tab">
-										Cuenta
+										Datos Personales
 									</a>
 									<a class="list-group-item list-group-item-action" data-bs-toggle="list" href="#password" role="tab">
 										Datos Profesionales
@@ -51,29 +63,51 @@
 									<div class="card">
 										<div class="card-header">
 
-											<h5 class="card-title mb-0">Public info</h5>
+											<h5 class="card-title mb-0">Informacion Publica</h5>
 										</div>
 										<div class="card-body">
-											<form>
+											<form action="update_personal_info" method="POST" enctype="multipart/form-data">
+												{% csrf_token %}
 												<div class="row">
 													<div class="col-md-8">
 														<div class="mb-3">
 															<label class="form-label" for="inputUsername">Nombre Usuario</label>
-															<input type="text" class="form-control" id="inputUsername" placeholder="Username">
+															<input type="text" class="form-control"  placeholder="{{ user.username }}" disabled>
 														</div>
 														<div class="mb-3">
 															<label class="form-label" for="inputUsername">Biografia</label>
-															<textarea rows="2" class="form-control" id="inputBio" placeholder="Tell something about yourself"></textarea>
+															<textarea rows="4" class="form-control" name="personal_info" placeholder="Agrega una descirpcion Tuya">{{ usuario.personal_info }}</textarea>
 														</div>
 													</div>
 													<div class="col-md-4">
 														<div class="text-center">
-															<img alt="Jassa" src="{% static 'img/man_avatar.png' %}" class="rounded-circle img-responsive mt-2" width="128" height="128">
+															<img id="profilePreview" src="{% static 'img/man_avatar.png' %}" class="rounded-circle img-responsive mt-2" width="128" height="128">
 															<div class="mt-2">
-																<span class="btn btn-primary"><i class="fas fa-upload"></i> Upload</span>
+																<label for="profile_image" class="btn btn-primary">
+																<i class="fas fa-upload"></i> Subir Imagen
+																</label>
+																<input 
+																		type="file" 
+																		id="profile_image" 
+																		name="profile_image" 
+																		accept="image/*" 
+																		class="d-none" 
+																		onchange="previewImage(event)">
 															</div>
-															<small>For best results, use an image at least 128px by 128px in .jpg format</small>
+															<small>Para mejores resultados, usa una imagen de al menos 128x128px en formato .jpg o .png</small>
 														</div>
+
+														<!-- Script para previsualizar -->
+														<script>
+														function previewImage(event) {
+															const reader = new FileReader();
+															reader.onload = function(){
+																const output = document.getElementById('profilePreview');
+																output.src = reader.result;
+															};
+															reader.readAsDataURL(event.target.files[0]);
+														}
+														</script>
 													</div>
 												</div>
 
@@ -89,54 +123,114 @@
 											<h5 class="card-title mb-0">Informacion Personal</h5>
 										</div>
 										<div class="card-body">
-											<form>
+											<form action="update_personal_info" method="POST">
+												{% csrf_token %}
 												<div class="row">
 													<div class="mb-3 col-md-6">
-														<label class="form-label" for="inputFirstName">Nombres</label>
-														<input type="text" class="form-control" id="inputFirstName" placeholder="First name">
+														<label class="form-label" for="names">Nombres</label>
+														<input 
+															type="text" 
+															class="form-control" 
+															id="names" 
+															name="names" 
+															value="{{ usuario.names }}" 
+															placeholder="Ingresa tu nombre">
 													</div>
 													<div class="mb-3 col-md-6">
-														<label class="form-label" for="inputLastName">Apellidos</label>
-														<input type="text" class="form-control" id="inputLastName" placeholder="Last name">
+														<label class="form-label" for="last_names">Apellidos</label>
+														<input 
+															type="text" 
+															class="form-control" 
+															id="last_names" 
+															name="last_names" 
+															value="{{ usuario.last_names }}" 
+															placeholder="Ingresa tus apellidos">
 													</div>
 												</div>
+
 												<div class="row">
 													<div class="mb-3 col-md-3">
-														<label class="form-label" for="inputCity">Rut</label>
-														<input type="text" class="form-control" id="inputCity">
+														<label class="form-label" for="rut">RUT</label>
+														<input 
+															type="text" 
+															class="form-control" 
+															id="rut" 
+															name="rut" 
+															value="{{ usuario.rut }}" 
+															placeholder="Ej: 12.345.678-9">
 													</div>
 													<div class="mb-3 col-md-3">
-														<label class="form-label" for="inputState">Fono</label>
-														<input type="text" class="form-control" id="inputCity">
+														<label class="form-label" for="phone">Teléfono</label>
+														<input 
+															type="text" 
+															class="form-control" 
+															id="phone" 
+															name="phone" 
+															value="{{ usuario.phone }}" 
+															placeholder="Ej: +56 9 1234 5678">
 													</div>
 													<div class="mb-3 col-md-6">
-														<label class="form-label" for="inputZip">Email</label>
-														<input type="text" class="form-control" id="inputZip">
+														<label class="form-label" for="email">Email</label>
+														<input 
+															type="email" 
+															class="form-control" 
+															id="email" 
+															name="email" 
+															value="{{ usuario.email }}" 
+															placeholder="ejemplo@correo.com">
 													</div>
 												</div>
+
 												<div class="mb-3">
-													<label class="form-label" for="inputAddress">Direccion</label>
-													<input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">
+													<label class="form-label" for="address">Dirección</label>
+													<input 
+														type="text" 
+														class="form-control" 
+														id="address" 
+														name="address" 
+														value="{{ usuario.address }}" 
+														placeholder="Ingresa tu dirección">
 												</div>
-												<div class="mb-3">
-													<label class="form-label" for="inputAddress2">Direccion alternativa</label>
-													<input type="text" class="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor">
-												</div>
+
 												<div class="row">
-													<div class="mb-3 col-md-6">
-														<label class="form-label" for="inputCity">Region</label>
-														<input type="text" class="form-control" id="inputCity">
-													</div>
 													<div class="mb-3 col-md-4">
-														<label class="form-label" for="inputState">Comuna</label>
-														<select id="inputState" class="form-control">
-															<option selected="">Choose...</option>
-															<option>...</option>
-														</select>
+														<label class="form-label" for="region">Región</label>
+														<input 
+															type="text" 
+															class="form-control" 
+															id="region" 
+															name="region" 
+															value="{{ usuario.region|default:'' }}" 
+															placeholder="Ej: Región Metropolitana">
+													</div>
+													<div class="mb-3 col-md-3">
+														<label class="form-label" for="ciudad">Ciudad</label>
+														<input 
+															type="text" 
+															class="form-control" 
+															id="ciudad" 
+															name="city" 
+															value="{{ usuario.city |default:''}}" 
+															placeholder="Ej: Santiago">
+													</div>
+													<div class="mb-3 col-md-3">
+														<label class="form-label" for="sexo">Sexo</label>
+														<input 
+															type="text" 
+															class="form-control" 
+															id="sexo" 
+															name="sexo" 
+															value="{{ usuario.sexo }}" 
+															placeholder="Ej: Masculino">
 													</div>
 													<div class="mb-3 col-md-2">
-														<label class="form-label" for="inputZip">Zip</label>
-														<input type="text" class="form-control" id="inputZip">
+														<label class="form-label" for="birth_date">F. Nacimiento</label>
+														<input 
+															type="date" 
+															class="form-control" 
+															id="birth_date" 
+															name="birth_date" 
+															value="{{ usuario.birth_date|date:'Y-m-d' }}">
 													</div>
 												</div>
 												<button type="submit" class="btn btn-primary">Guardar Cambios</button>
@@ -149,25 +243,57 @@
 								<div class="tab-pane fade" id="password" role="tabpanel">
 									<div class="card">
 										<div class="card-body">
-											<h5 class="card-title">Password</h5>
+											<h5 class="card-title">Informacion Profesional</h5>
+											<form class="container mt-4" method="POST" action="update_personal_info">
+												{% csrf_token %}
 
-											<form>
-												<div class="mb-3">
-													<label class="form-label" for="inputPasswordCurrent">Current password</label>
-													<input type="password" class="form-control" id="inputPasswordCurrent">
-													<small><a href="#">Forgot your password?</a></small>
+												<div class="row">
+													<div class="col-md-6 mb-3">
+														<label class="form-label" for="inputDegree">Título Profesional</label>
+														<input type="text" name="degree" class="form-control" id="inputDegree" placeholder="Ej: Kinesiólogo, Ingeniero Civil, Psicólogo..." value="{{ user.usuario.degree|default:'' }}">
+													</div>
+
+													<div class="col-md-6 mb-3">
+														<label class="form-label" for="inputInstitution">Institución</label>
+														<input type="text" name="institution" class="form-control" id="inputInstitution" placeholder="Ej: Universidad de Chile" value="{{ user.usuario.institution|default:'' }}">
+													</div>
 												</div>
-												<div class="mb-3">
-													<label class="form-label" for="inputPasswordNew">New password</label>
-													<input type="password" class="form-control" id="inputPasswordNew">
+
+												<div class="row">
+													<div class="col-md-3 mb-3">
+														<label class="form-label" for="inputGraduationYear">Año de egreso</label>
+														<input type="number" name="graduation_year" class="form-control" id="inputGraduationYear" min="1950" max="2100" placeholder="Ej: 2020" value="{{ user.usuario.graduation_year|default:'' }}">
+													</div>
+
+													<div class="col-md-3 mb-3">
+														<label class="form-label" for="inputExperience">Años de experiencia</label>
+														<input type="number" name="years_experience" class="form-control" id="inputExperience" min="0" placeholder="Ej: 5" value="{{ user.usuario.years_experience|default:'' }}">
+													</div>
+
+													<div class="col-md-6 mb-3">
+														<label class="form-label" for="inputSpecialization">Área o especialización</label>
+														<input type="text" name="specialization" class="form-control" id="inputSpecialization" placeholder="Ej: Rehabilitación músculo-esquelética..." value="{{ user.usuario.specialization|default:'' }}">
+													</div>
 												</div>
-												<div class="mb-3">
-													<label class="form-label" for="inputPasswordNew2">Verify password</label>
-													<input type="password" class="form-control" id="inputPasswordNew2">
+
+												<div class="row">
+													<div class="col-md-12 mb-3">
+														<label class="form-label" for="inputDescription">Descripción profesional</label>
+														<textarea name="description" class="form-control" id="inputDescription" rows="4" placeholder="Describe brevemente tu trayectoria, logros o áreas de interés profesional.">{{ user.usuario.description|default:'' }}</textarea>
+													</div>
 												</div>
-												<button type="submit" class="btn btn-primary">Save changes</button>
+
+												<div class="row">
+													<div class="col-md-12 mb-3">
+														<label class="form-label" for="inputCourses">Cursos o certificaciones relevantes</label>
+														<textarea name="courses" class="form-control" id="inputCourses" rows="3" placeholder="Ej: Diplomado en Rehabilitación Deportiva (2022)...">{{ user.usuario.courses|default:'' }}</textarea>
+													</div>
+												</div>
+
+												<div class="text-end">
+													<button type="submit" class="btn btn-primary">Guardar información</button>
+												</div>
 											</form>
-
 										</div>
 									</div>
 								</div>

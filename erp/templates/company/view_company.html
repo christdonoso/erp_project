@@ -1,0 +1,30 @@
+{% extends 'base_templates/base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-3">Empresas asociadas</h2>
+
+    {% if companies %}
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {% for company in companies %}
+                <div class="card p-4 shadow rounded-xl">
+                    {% if company.logo %}
+                        <img src="{{ company.logo.url }}" alt="{{ company.name }}" class="w-24 h-24 object-contain mx-auto mb-3">
+                    {% endif %}
+                    <h5 class="text-lg font-semibold text-center">{{ company.name }}</h5>
+                    <p class="text-sm text-gray-600 text-center mb-2">{{ company.rut }}</p>
+                    <p class="text-sm text-gray-700 text-center">{{ company.email }}</p>
+                    <div class="text-center mt-3">
+                        <a href="" class="btn btn-primary btn-sm">Ver Detalles</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-info mt-4">
+            No tienes empresas asociadas.
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
